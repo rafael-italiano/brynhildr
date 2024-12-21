@@ -1,0 +1,2 @@
+# brynhildr
+Personal finance manager

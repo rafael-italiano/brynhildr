@@ -52,20 +52,6 @@ func (s *AccountService) GetAccountByID(id int) (*Account, error) {
 	return &account, nil
 }
 
-func (s *AccountService) GetAccount(account *Account) error {
-	query := "INSERT INTO accounts (id, name, type, balance) VALUES (?, ?, ?, ?)"
-	result, err := s.db.Exec(query, account.ID, account.Name, account.Type, account.Balance)
-	if err != nil {
-		return err
-	}
-	lastInsertID, err := result.LastInsertId()
-	if err != nil {
-		return err
-	}
-	account.ID = int(lastInsertID)
-	return nil
-}
-
 func (s *AccountService) CreateAccount(account *Account) error {
 	query := "INSERT INTO accounts (id, name, type, balance) VALUES (?, ?, ?, ?)"
 	result, err := s.db.Exec(query, account.ID, account.Name, account.Type, account.Balance)

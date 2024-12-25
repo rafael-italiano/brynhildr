@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS books (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-)
+);
 
 CREATE TABLE IF NOT EXISTS accounts (
     id SERIAL PRIMARY KEY,
@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS accounts (
 
 CREATE TABLE IF NOT EXISTS transactions (
     id SERIAL PRIMARY KEY,
-    description TEXT,
+    memo TEXT,
+    debit BIGINT NOT NULL,
+    credit BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -22,7 +24,7 @@ CREATE TABLE IF NOT EXISTS transaction_entries (
     id SERIAL PRIMARY KEY,
     transaction_id INT NOT NULL REFERENCES transactions(id),
     account_id INT NOT NULL REFERENCES accounts(id),
-    credit NUMERIC NOT NULL,
-    debit NUMERIC NOT NULL
+    credit BIGINT NOT NULL,
+    debit BIGINT NOT NULL
 );
 

@@ -1,0 +1,58 @@
+# Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-5.3.1
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    io.kubernetes.cri-o.SandboxID/postgres: 143119b4721e15b3873d78349a0f85fdf624b230f29247793d0b2442dbd78722
+    io.kubernetes.cri-o.SandboxID/webserver: 143119b4721e15b3873d78349a0f85fdf624b230f29247793d0b2442dbd78722
+  creationTimestamp: "2024-12-25T06:57:47Z"
+  labels:
+    app: brynhildr
+  name: brynhildr
+spec:
+  containers:
+  - args:
+    - postgres
+    env:
+    - name: POSTGRES_USER
+      value: admin
+    - name: POSTGRES_PASSWORD
+      value: admin
+    - name: POSTGRES_DB
+      value: brynhildr
+    - name: POSTGRES_PORT
+      value: "5432"
+    - name: DATABASE_URL
+      value: '"postgres://admin:admin@localhost:5432/brynhildr"'
+    image: docker.io/library/postgres:17
+    name: postgres
+    volumeMounts:
+    - mountPath: /docker-entrypoint-initdb.d/init.sql
+      name: home-rafaelitaliano-go-src-github.com-rafael-italiano-brynhildr-db-init.sql-host-0
+      readOnly: true
+    - mountPath: /var/lib/postgresql/data
+      name: pg_data-pvc
+  - env:
+    - name: POSTGRES_PORT
+      value: "5432"
+    - name: DATABASE_URL
+      value: '"postgres://admin:admin@localhost:5432/brynhildr"'
+    - name: POSTGRES_USER
+      value: admin
+    - name: POSTGRES_PASSWORD
+      value: admin
+    - name: POSTGRES_DB
+      value: brynhildr
+    image: localhost/brynhildr-app:latest
+    name: webserver
+  volumes:
+  - hostPath:
+      path: /home/rafaelitaliano/go/src/github.com/rafael-italiano/brynhildr/db/init.sql
+      type: File
+    name: home-rafaelitaliano-go-src-github.com-rafael-italiano-brynhildr-db-init.sql-host-0
+  - name: pg_data-pvc
+    persistentVolumeClaim:
+      claimName: pg_data

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +16,9 @@ import (
 func main() {
 
 	config, err := pgx.ParseConfig(os.Getenv("DATABASE_URL"))
+	if err != nil {
+		panic(fmt.Sprintf("Failed to parse database URL: %v", err))
+	}
 	config.OnNotice = func(c *pgconn.PgConn, n *pgconn.Notice) {
 		log.Printf("PID: %d; Message: %s\n", c.PID(), n.Message)
 	}
